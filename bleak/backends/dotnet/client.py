@@ -64,11 +64,11 @@ class BleakClientDotNet(BaseBleakClient):
     Common Language Runtime (CLR). Therefore, much of the code below has a distinct C# feel.
     """
 
-    def __init__(self, address: str, loop: AbstractEventLoop = None, **kwargs):
-        super(BleakClientDotNet, self).__init__(address, loop, **kwargs)
+    def __init__(self, device, loop: AbstractEventLoop = None, **kwargs):
+        super(BleakClientDotNet, self).__init__(device, loop, **kwargs)
 
         # Backend specific. Python.NET objects.
-        self._device_info = None
+        self._device_info = device.details
         self._requester = None
         self._bridge = Bridge()
         self._callbacks = {}
@@ -86,17 +86,17 @@ class BleakClientDotNet(BaseBleakClient):
 
         """
         # Try to find the desired device.
-        devices = await discover(2.0, loop=self.loop)
-        sought_device = list(
-            filter(lambda x: x.address.upper() == self.address.upper(), devices)
-        )
-
-        if len(sought_device):
-            self._device_info = sought_device[0].details
-        else:
-            raise BleakError(
-                "Device with address {0} was " "not found.".format(self.address)
-            )
+        # devices = await discover(2.0, loop=self.loop)
+        # sought_device = list(
+        #     filter(lambda x: x.address.upper() == self.address.upper(), devices)
+        # )
+        #
+        # if len(sought_device):
+        #     self._device_info = sought_device[0].details
+        # else:
+        #     raise BleakError(
+        #         "Device with address {0} was " "not found.".format(self.address)
+        #     )
 
         logger.debug("Connecting to BLE device @ {0}".format(self.address))
 

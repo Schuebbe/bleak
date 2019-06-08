@@ -18,8 +18,9 @@ class BaseBleakClient(abc.ABC):
     The documentation of this interface should thus be safe to use as a reference for your implementation.
     """
 
-    def __init__(self, address, loop=None, **kwargs):
-        self.address = address
+    def __init__(self, device, loop=None, **kwargs):
+        self.device = device
+        self.address = self.device.address
         self.loop = loop if loop else asyncio.get_event_loop()
 
         self.services = BleakGATTServiceCollection()
